@@ -10,7 +10,16 @@
     <div class="calculator">
         <h1>Калькулятор</h1>
         <input type="text" id="display" class="display" readonly value="0">
-        
+
+        <div class="converter">
+            <div class="converter-row">
+                <select id="fromUnit" aria-label="З одиниці" onchange="updateConversion()"></select>
+                <button class="swap" onclick="swapUnits()" title="Поміняти місцями">⇄</button>
+                <select id="toUnit" aria-label="В одиницю" onchange="updateConversion()"></select>
+            </div>
+            <div id="conversionResult" class="conversion-result"></div>
+        </div>
+
         <div class="buttons">
             <button class="btn function" onclick="clearDisplay()">C</button>
             <button class="btn function" onclick="deleteLast()">⌫</button>
