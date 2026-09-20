@@ -47,6 +47,38 @@ body {
     border-color: #667eea;
 }
 
+.display.long {
+    font-size: 20px;
+}
+
+.base-switch {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.base-btn {
+    flex: 1;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: #f5f5f5;
+    color: #333;
+    cursor: pointer;
+}
+
+.base-btn:hover {
+    background: #e0e0e0;
+}
+
+.base-btn.active {
+    background: #667eea;
+    border-color: #667eea;
+    color: white;
+}
+
 .converter {
     margin-bottom: 20px;
 }
@@ -95,10 +127,30 @@ body {
     word-break: break-all;
 }
 
-.buttons {
+.buttons,
+.hex-keys {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
+}
+
+.hex-keys {
+    grid-template-columns: repeat(6, 1fr);
+    margin-bottom: 10px;
+}
+
+.hex-keys[hidden] {
+    display: none;
+}
+
+.hex-keys .btn {
+    padding: 12px 0;
+}
+
+.btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .btn {

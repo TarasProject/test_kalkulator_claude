@@ -11,6 +11,12 @@
         <h1>Калькулятор</h1>
         <input type="text" id="display" class="display" readonly value="0">
 
+        <div class="base-switch" role="group" aria-label="Система числення">
+            <button class="base-btn active" data-base="10" onclick="setBase(10)">DEC</button>
+            <button class="base-btn" data-base="2" onclick="setBase(2)">BIN</button>
+            <button class="base-btn" data-base="16" onclick="setBase(16)">HEX</button>
+        </div>
+
         <div class="converter">
             <div class="converter-row">
                 <select id="fromUnit" aria-label="З одиниці" onchange="updateConversion()"></select>
@@ -18,6 +24,15 @@
                 <select id="toUnit" aria-label="В одиницю" onchange="updateConversion()"></select>
             </div>
             <div id="conversionResult" class="conversion-result"></div>
+        </div>
+
+        <div id="hexKeys" class="hex-keys" hidden>
+            <button class="btn number" onclick="appendNumber('A')">A</button>
+            <button class="btn number" onclick="appendNumber('B')">B</button>
+            <button class="btn number" onclick="appendNumber('C')">C</button>
+            <button class="btn number" onclick="appendNumber('D')">D</button>
+            <button class="btn number" onclick="appendNumber('E')">E</button>
+            <button class="btn number" onclick="appendNumber('F')">F</button>
         </div>
 
         <div class="buttons">

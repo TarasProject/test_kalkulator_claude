@@ -3,6 +3,18 @@ let currentInput = '0';
 let previousInput = '';
 let operation = null;
 let shouldResetDisplay = false;
+let base = 10; // поточна система числення: 2, 10 або 16
+
+const DIGITS = '0123456789ABCDEF';
+
+// У недесяткових системах працюємо лише з цілими числами
+function parseValue(str) {
+    return base === 10 ? parseFloat(str) : parseInt(str, base);
+}
+
+function formatValue(value) {
+    return base === 10 ? value.toString() : Math.trunc(value).toString(base).toUpperCase();
+}
 
 // Розміри одиниць у бітах
 const UNIT_GROUPS = [
@@ -29,15 +41,17 @@ function fillUnitSelect(select, selected) {
 }
 
 function updateConversion() {
-    const value = parseFloat(currentInput);
+    const value = parseValue(currentInput);
     if (isNaN(value)) {
         conversionResult.textContent = '—';
         return;
     }
     const result = value * UNIT_BITS[fromUnit.value] / UNIT_BITS[toUnit.value];
+    // Значення показуємо в десятковій системі, щоб воно не плутало з одиницями
+    const shown = base === 10 ? currentInput : value;
     // toPrecision прибирає похибку float (напр. 0.30000000000000004)
     conversionResult.textContent =
-        `${currentInput} ${fromUnit.value} = ${Number(result.toPrecision(12))} ${toUnit.value}`;
+        `${shown} ${fromUnit.value} = ${Number(result.toPrecision(12))} ${toUnit.value}`;
 }
 
 function swapUnits() {
@@ -47,10 +61,46 @@ function swapUnits() {
 
 function updateDisplay() {
     display.value = currentInput;
+    display.classList.toggle('long', currentInput.length > 10);
     updateConversion();
 }
 
+// Вмикає лише кнопки, доступні в поточній системі числення
+function updateBaseControls() {
+    for (const btn of document.querySelectorAll('.base-btn')) {
+        btn.classList.toggle('active', Number(btn.dataset.base) === base);
+    }
+    for (const btn of document.querySelectorAll('.btn.number')) {
+        const key = btn.textContent;
+        btn.disabled = key === '.' ? base !== 10 : DIGITS.indexOf(key) >= base;
+    }
+    document.getElementById('hexKeys').hidden = base !== 16;
+}
+
+function setBase(newBase) {
+    if (newBase === base) {
+        return;
+    }
+    const current = parseValue(currentInput);
+    const previous = parseValue(previousInput);
+    base = newBase;
+    if (isNaN(current)) {
+        // Після помилки нічого конвертувати — починаємо з нуля
+        clearDisplay();
+    } else {
+        currentInput = formatValue(current);
+        if (!isNaN(previous)) {
+            previousInput = formatValue(previous);
+        }
+        updateDisplay();
+    }
+    updateBaseControls();
+}
+
 function appendNumber(num) {
+    if (num === '.' ? base !== 10 : DIGITS.indexOf(num) >= base) {
+        return;
+    }
     if (shouldResetDisplay) {
         currentInput = num;
         shouldResetDisplay = false;
@@ -81,8 +131,8 @@ function calculate() {
     }
 
     let result;
-    const prev = parseFloat(previousInput);
-    const current = parseFloat(currentInput);
+    const prev = parseValue(previousInput);
+    const current = parseValue(currentInput);
 
     switch (operation) {
         case '+':
@@ -95,7 +145,8 @@ function calculate() {
             result = prev * current;
             break;
         case '/':
-            result = current !== 0 ? prev / current : 'Помилка';
+            // У недесяткових системах ділення цілочисельне
+            result = current !== 0 ? (base === 10 ? prev / current : Math.trunc(prev / current)) : 'Помилка';
             break;
         case '%':
             result = prev % current;
@@ -104,7 +155,7 @@ function calculate() {
             return;
     }
 
-    currentInput = result.toString();
+    currentInput = typeof result === 'string' ? result : formatValue(result);
     operation = null;
     shouldResetDisplay = true;
     updateDisplay();
@@ -130,3 +181,4 @@ function deleteLast() {
 fillUnitSelect(fromUnit, 'B');
 fillUnitSelect(toUnit, 'bit');
 updateDisplay();
+updateBaseControls();
