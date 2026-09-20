@@ -4,12 +4,43 @@
     box-sizing: border-box;
 }
 
+/* Кольорові теми: перемикаються атрибутом data-theme на <html> */
+:root {
+    --accent: #667eea;
+    --accent-dark: #5568d3;
+    --accent-2: #764ba2;
+}
+
+:root[data-theme="ocean"] {
+    --accent: #2b9fd8;
+    --accent-dark: #1f84b7;
+    --accent-2: #1a4f8b;
+}
+
+:root[data-theme="forest"] {
+    --accent: #38a169;
+    --accent-dark: #2f855a;
+    --accent-2: #22543d;
+}
+
+:root[data-theme="sunset"] {
+    --accent: #ed8936;
+    --accent-dark: #dd6b20;
+    --accent-2: #c53030;
+}
+
+:root[data-theme="rose"] {
+    --accent: #e0568f;
+    --accent-dark: #c9437b;
+    --accent-2: #7b2d8e;
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
     font-family: 'Arial', sans-serif;
 }
 
@@ -19,6 +50,24 @@ body {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     padding: 20px;
     width: 320px;
+    position: relative;
+}
+
+.theme-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    border: none;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+}
+
+.theme-btn:hover {
+    background: var(--accent-dark);
 }
 
 .calculator h1 {
@@ -44,7 +93,7 @@ body {
 
 .display:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--accent);
 }
 
 .display.long {
@@ -74,8 +123,8 @@ body {
 }
 
 .base-btn.active {
-    background: #667eea;
-    border-color: #667eea;
+    background: var(--accent);
+    border-color: var(--accent);
     color: white;
 }
 
@@ -101,7 +150,7 @@ body {
 
 .converter select:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--accent);
 }
 
 .swap {
@@ -109,13 +158,13 @@ body {
     font-size: 18px;
     border: none;
     border-radius: 8px;
-    background: #667eea;
+    background: var(--accent);
     color: white;
     cursor: pointer;
 }
 
 .swap:hover {
-    background: #5568d3;
+    background: var(--accent-dark);
 }
 
 .conversion-result {
@@ -184,11 +233,11 @@ body {
 }
 
 .btn.function {
-    background: #667eea;
+    background: var(--accent);
 }
 
 .btn.function:hover {
-    background: #5568d3;
+    background: var(--accent-dark);
 }
 
 .btn.equals {

@@ -178,6 +178,32 @@ function deleteLast() {
     updateDisplay();
 }
 
+const THEMES = ['default', 'ocean', 'forest', 'sunset', 'rose'];
+
+function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    try {
+        localStorage.setItem('theme', theme);
+    } catch (e) {
+        // localStorage може бути недоступним — тема просто не збережеться
+    }
+}
+
+function nextTheme() {
+    // Якщо тема ще не задана, indexOf дає -1 — рахуємо це як 'default'
+    const current = Math.max(0, THEMES.indexOf(document.documentElement.dataset.theme));
+    applyTheme(THEMES[(current + 1) % THEMES.length]);
+}
+
+try {
+    const saved = localStorage.getItem('theme');
+    if (THEMES.includes(saved)) {
+        applyTheme(saved);
+    }
+} catch (e) {
+    // без збереженої теми лишається стандартна
+}
+
 fillUnitSelect(fromUnit, 'B');
 fillUnitSelect(toUnit, 'bit');
 updateDisplay();
